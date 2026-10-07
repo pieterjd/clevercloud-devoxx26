@@ -4,6 +4,6 @@
     "goal": "package"
   },
   "deploy": {
-    "jarName": "target/clevercloud-0.0.1-SNAPSHOT.jar",
+    "jarName": "target/clevercloud-0.0.1-SNAPSHOT.jar"
   }
 }
