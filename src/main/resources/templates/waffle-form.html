@@ -1,0 +1,157 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Waffle Toppings</title>
+    <style>
+        :root {
+            --belgian-black: #000000;
+            --belgian-yellow: #f9d335;
+            --belgian-red: #d62828;
+            --belgian-cream: #fffaf0;
+            --belgian-white: #ffffff;
+        }
+
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            background: linear-gradient(180deg, var(--belgian-cream) 0%, #ffffff 100%);
+            color: var(--belgian-black);
+        }
+
+        .container {
+            max-width: 720px;
+            margin: 40px auto;
+            padding: 0 20px;
+        }
+
+        .flag-bar {
+            height: 18px;
+            border-radius: 12px 12px 0 0;
+            background: linear-gradient(to right, var(--belgian-black) 0 33.33%, var(--belgian-yellow) 33.33% 66.66%, var(--belgian-red) 66.66% 100%);
+            box-shadow: 0 4px 12px rgba(0,0,0,0.12);
+        }
+
+        .panel {
+            background: var(--belgian-white);
+            border: 3px solid var(--belgian-black);
+            border-radius: 0 0 18px 18px;
+            box-shadow: 0 10px 24px rgba(0,0,0,0.12);
+            padding: 28px;
+        }
+
+        h1 {
+            margin: 0 0 10px;
+            font-size: 2.4rem;
+            color: var(--belgian-black);
+            text-transform: uppercase;
+            letter-spacing: 0.08em;
+        }
+
+        .subtitle {
+            margin: 0 0 24px;
+            font-size: 1.05rem;
+            color: var(--belgian-red);
+            font-weight: 700;
+        }
+
+        form {
+            background: linear-gradient(180deg, #fffefc 0%, #fff5d1 100%);
+            border: 2px solid var(--belgian-yellow);
+            border-radius: 14px;
+            padding: 20px;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 700;
+            color: var(--belgian-black);
+        }
+
+        select, button {
+            width: 100%;
+            padding: 12px 14px;
+            font-size: 1rem;
+            box-sizing: border-box;
+            border-radius: 10px;
+        }
+
+        select {
+            border: 2px solid var(--belgian-red);
+            background: white;
+            color: var(--belgian-black);
+            margin-bottom: 18px;
+        }
+
+        button {
+            background: var(--belgian-red);
+            color: var(--belgian-white);
+            border: none;
+            cursor: pointer;
+            font-weight: 700;
+            letter-spacing: 0.04em;
+            text-transform: uppercase;
+            transition: transform 0.15s ease, box-shadow 0.15s ease;
+            box-shadow: 0 6px 14px rgba(214, 40, 40, 0.28);
+        }
+
+        button:hover {
+            transform: translateY(-1px);
+        }
+
+        .message {
+            margin-top: 18px;
+            padding: 12px 14px;
+            background: #eaf7d6;
+            border-left: 6px solid var(--belgian-yellow);
+            border-radius: 8px;
+            color: var(--belgian-black);
+            font-weight: 600;
+        }
+
+        h2 {
+            margin-top: 30px;
+            color: var(--belgian-red);
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+        }
+
+        ul {
+            padding-left: 20px;
+            line-height: 1.8;
+        }
+
+        li {
+            border-bottom: 1px solid rgba(0,0,0,0.08);
+            padding-bottom: 4px;
+        }
+    </style>
+</head>
+<body>
+<div class="container">
+    <div class="flag-bar"></div>
+    <div class="panel">
+        <h1>Belgian Waffle Bar</h1>
+        <p class="subtitle">Choose your favourite topping from Brussels to Bruges</p>
+
+        <form th:action="@{/waffles}" th:object="${selection}" method="post">
+            <label for="topping">Topping</label>
+            <select id="topping" th:field="*{topping}">
+                <option value="">-- Select a topping --</option>
+                <option th:each="topping : ${toppings}" th:value="${topping}" th:text="${topping}"></option>
+            </select>
+            <button type="submit">Save selection</button>
+        </form>
+
+        <div th:if="${message}" class="message" th:text="${message}"></div>
+
+        <h2>Previous selections</h2>
+        <div th:if="${#lists.isEmpty(savedSelections)}">No waffles have been ordered yet.</div>
+        <ul th:unless="${#lists.isEmpty(savedSelections)}">
+            <li th:each="entry : ${savedSelections}" th:text="${#temporals.format(entry.createdAt, 'yyyy-MM-dd HH:mm')} + ' - ' + ${entry.topping}"></li>
+        </ul>
+    </div>
+</div>
+</body>
+</html>
